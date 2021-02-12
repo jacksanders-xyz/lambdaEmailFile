@@ -5,15 +5,15 @@ exports.handler = async (event, context) => {
     const sgMail = require("@sendgrid/mail");
     sgMail.setApiKey(process.env.SECRET_KEY)
 
-    const { email, message } = event.body
+    const { email, message } = JSON.parse(event.body)
 
     try {
       await sgMail.send({
         to: "jack.sanders.xyz@gmail.com",
         from: "jack.sanders.xyz@gmail.com",
+        reply_to: email,
         subject: "Inbound message from jacksanders.xyz",
-        text: "message",
-        html: "<strong>email</>",
+        text: message,
       })
     } catch (err) {
       statusCode = "500";
